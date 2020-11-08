@@ -1,0 +1,33 @@
+{
+	"name": "diyBlog-node",
+	"version": "0.0.1",
+	"author": "焦大志",
+	"description": "连接操作mysql",
+	"keywords": [
+		"node.js",
+		"mysql"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://path/to/url"
+	},
+	"license": "MIT",
+	"engines": {
+		"node": "0.10.x"
+	},
+	"contributors": [
+		{
+			"name": "李四",
+			"email": "lisi@example.com"
+		}
+	],
+	"scripts": {
+		"dev": "node ./www.js",
+		"prod": "node ./www.js"
+	},
+	"dependencies": {
+		"http": "0.0.1-security",
+		"mysql": "^2.18.1"
+	},
+	"devDependencies": {}
+}
