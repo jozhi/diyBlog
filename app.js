@@ -25,15 +25,15 @@ const getPostData = (req) => {
       return;
     }
 
-    resolve(
-      JSON.parse(postData);
-    )
+    console.log('postData::',postData);
+
+    resolve(JSON.parse(postData))
   })
 };
 
 const serverHandle = (req, res) => {
   // 设置返回格式 JSON
-  res.setHeader({'Content-type', 'application/json'});
+  res.setHeader({"Content-type":"application/json"});
   // 处理 path
   const method = req.method;
   const url = req.url;
@@ -65,10 +65,10 @@ const serverHandle = (req, res) => {
     // }
 
     // 未命中路由
-    res.writeHead(404, {'Content-type', 'text/plain'});
+    res.writeHead(404, {'Content-type': 'text/plain'});
     res.write('404 Not Found\n');
     res.end;
   });
 };
 
-module.exports serverHandle;
+module.exports = serverHandle;
