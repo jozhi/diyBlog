@@ -1,39 +1,31 @@
-
 const querystring = require('querystring');
 
-const handleBlogRouter = require('./router/blog');
-// const handleUserRouter = reuqire('./srcc/router/user');
+const handleBlogRouter = require('./router/router');
 
 const getPostData = (req) => {
-  if(req.method!=='POST'){
-    resolve({});
-    return;
-  }
-
-  if(req.headers['content-type']!=='application/json'){
-    resolve({});
-    return;
-  }
-
-  let postData = '';
-  req.on('data', chunk => {
-    postData += chunk.toString();
-  });
-  req.on('end', () => {
-    if(!postData) {
+  return new Promise((resolve, reject) => {
+    if(req.method!=='POST'){
       resolve({});
       return;
     }
 
-    console.log('postData::',postData);
-
-    resolve(JSON.parse(postData))
+    // post 请求取参
+    let postData = '';
+    req.on('data', chunk => {
+      postData += chunk.toString();
+    });
+    req.on('end', () => {
+      if(!postData) {
+        resolve({});
+        return;
+      }
+      resolve(JSON.parse(postData))
+    })
   })
 };
 
 const serverHandle = (req, res) => {
-  // 设置返回格式 JSON
-  res.setHeader({"Content-type":"application/json"});
+  console.log('bingo');
   // 处理 path
   const method = req.method;
   const url = req.url;
@@ -43,11 +35,14 @@ const serverHandle = (req, res) => {
   req.query =  querystring.parse(url.split('?')[1]);
 
   // 处理 postData
-  getPostData().then(postData => {
+  getPostData(req).then(postData => {
     req.body = postData;
+    
+    console.log('req.bodyxxx:',JSON.stringify(req.body));
 
     // 处理 blog 路由
     const blogData = handleBlogRouter(req, res);
+    console.log('请求返回结果：blogData:',blogData);
     if(blogData) {
       res.end(
         JSON.stringify(blogData)
@@ -68,6 +63,8 @@ const serverHandle = (req, res) => {
     res.writeHead(404, {'Content-type': 'text/plain'});
     res.write('404 Not Found\n');
     res.end;
+  }).catch((err) => {
+    console.log('err');
   });
 };
 
