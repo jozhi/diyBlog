@@ -12,20 +12,21 @@ const handleBlogRouter = async (req, res, callback) => {
   // TODO 请求博客列表
   if (method === 'GET' && path === '/api/blog/list') {
     const listData = await getList();
-        console.log('listData :',listData);
+        // console.log('listData :',listData);
     // return SuccessModel(listData);
     callback( SuccessModel(listData) )
+  }
+
+  // 新建一篇博客
+  if (method === 'POST' && path === '/api/blog/new') {
+    const data = await newBlog(req.body);
+    // return SuccessModel(data);
+    callback( SuccessModel(data) )
   }
 
   // 获取博客详情
   if (method === 'GET' && path === '/api/blog/detail') {
     const data = getDetail(id);
-    return SuccessModel(data);
-  }
-
-  // 新建一篇博客
-  if (method === 'POST' && path === '/api/blog/new') {
-    const data = newBlog(req.body);
     return SuccessModel(data);
   }
 

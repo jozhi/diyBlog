@@ -25,8 +25,38 @@ const getListAction = (author, keyword) => {
 const getList = () => {
   return getListAction().then(res=>{
     return res
+  }).catch((err) => {
+    return err
   })
 };
+
+const newBlogAction = (blogData) => {
+  let stmt = `INSERT INTO articles ( parent_menu_id, article_title, article_content, article_date)
+  VALUES(?,?,?,?)`;
+  let todo = [1, blogData.article_title, blogData.article_content, new Date()];
+
+  // console.log('todo',todo);
+
+  return new Promise((resolve,reject)=>{
+    connection.query(stmt, todo, (error, results, fields) => {
+      if (error) {
+        console.log('newBlogAction error:',error);
+        reject(error)
+      }else{
+        // get inserted id
+        resolve(JSON.parse(JSON.stringify(results)).insertId)
+      }
+    });
+  })
+};
+const newBlog = (blogData = {}) => {
+  return newBlogAction(blogData).then(res=>{
+    // console.log('######## newBlogAction res', res);
+    return res
+  }).catch(err=>{
+    return err
+  })
+}
 
 const getDetail = (id) => {
   // 先返回假数据
@@ -38,14 +68,6 @@ const getDetail = (id) => {
     author: 'zhangsan'
   }
 };
-
-const newBlog = (blogData = {}) => {
-  // blogData 是一个博客对象，包含 title content 属性
-  console.log('####### 返回 newBlog mockData',blogData);
-  return {
-    id: 3 // 表示新建博客，插入到数据库表里面的 id
-  };
-}
 
 const updateBlog = (id, blogData = {}) => {
   // blogData 是一个博客对象，包含title content 属性
