@@ -1,11 +1,12 @@
 const querystring = require('querystring');
 
+// 路由模块
 const handleBlogRouter = require('./router/router');
 
-const getPostData = (req) => {
-  return new Promise((resolve, reject) => {
+// 解析获取 post 请求的入参
+const getPostData = (req,callback) => {
     if(req.method!=='POST'){
-      resolve({});
+      callback({});
       return;
     }
 
@@ -16,56 +17,44 @@ const getPostData = (req) => {
     });
     req.on('end', () => {
       if(!postData) {
-        resolve({});
+        callback({});
         return;
       }
-      resolve(JSON.parse(postData))
+      callback(JSON.parse(postData))
     })
-  })
 };
 
 const serverHandle = (req, res) => {
-  console.log('bingo');
   // 处理 path
-  const method = req.method;
-  const url = req.url;
-  req.path = url.split('?')[0];
+  req.path = req.url.split('?')[0];
 
   // 处理 query
-  req.query =  querystring.parse(url.split('?')[1]);
+  req.query =  querystring.parse(req.url.split('?')[1]);
 
-  // 处理 postData
-  getPostData(req).then(postData => {
+  // 处理 postData  ~postData 的数据处理方法是异步的，所以需要 callback 方式
+  getPostData(req,function(postData){
     req.body = postData;
-    
-    console.log('req.bodyxxx:',JSON.stringify(req.body));
+    // console.log('req.bodyxxx:',JSON.stringify(req.body));
 
     // 处理 blog 路由
-    const blogData = handleBlogRouter(req, res);
-    console.log('请求返回结果：blogData:',blogData);
-    if(blogData) {
-      res.end(
-        JSON.stringify(blogData)
-      );
-      return;
-    }
+    handleBlogRouter(req, res,function(resData){
 
-    // // 处理 user 路由
-    // const userData = handleUserRouter(req, res);
-    // if(userData) {
-    //   res.end(
-    //     JSON.stringify(userData);
-    //     return;
-    //   )
-    // }
+      console.log('收到请求数据',resData);
+      if(resData) {
+        res.end(
+          JSON.stringify(resData)
+        );
+        return;
+      }else{
+        // 未命中路由
+        res.writeHead(404, {'Content-type': 'text/plain'});
+        res.write('404 Not Found\n');
+        res.end;
+      }
+    });
 
-    // 未命中路由
-    res.writeHead(404, {'Content-type': 'text/plain'});
-    res.write('404 Not Found\n');
-    res.end;
-  }).catch((err) => {
-    console.log('err');
-  });
+
+  })
 };
 
 module.exports = serverHandle;

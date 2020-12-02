@@ -1,7 +1,7 @@
 const SuccessModel = (dataModel) => {
   // 先返回假数据（格式是正确的）
   return {
-    "status": "success",
+    "success": true,
     "data": dataModel,
     "code":200
   }
@@ -10,7 +10,7 @@ const SuccessModel = (dataModel) => {
 const ErrorModel = (dataModel) => {
   // 先返回假数据
   return {
-    "status": "error",
+    "success": false,
     "data": dataModel,
     "code":00
   }

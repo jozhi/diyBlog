@@ -1,39 +1,31 @@
 // 连接阿里云服务器
 
-// const mysql      = require('mysql');
-// const connection = mysql.createConnection({
-//   host     : '47.98.198.113',
-//   user     : 'root',
-//   password : '123456',
-//   database : 'myBlog'
-// });
-// connection.connect();
- 
-// connection.query('select * from menus', function (error, results, fields) {
-//   if (error) throw error;
-//   console.log('The solution is: ', results);
-// });
+const mysql      = require('mysql');
+const connection = mysql.createConnection({
+  host     : '47.98.198.113',
+  user     : 'root',
+  password : '123456',
+  database : 'myBlog',
+  charset: "utf8"
+});
+connection.connect();
 
 
-
-const getList = (author, keyword) => {
-  // 先返回假数据（格式是正确的）
-  return [
-    {
-      id: 1,
-      title: '标题A',
-      content: '内容A',
-      createTime: 1558664497766,
-      author: 'zhangsan'
-    },
-    {
-      id: 2,
-      title: '标题B',
-      content: '内容B',
-      createTime: 1558664555616,
-      author: 'lisi'
-    }
-  ]
+const getListAction = (author, keyword) => {
+  return new Promise((resolve,reject)=>{
+    connection.query('select * from menus', function (error, results, fields) {
+      if (error) {
+        reject(JSON.stringify(error))
+      }else{
+        resolve(JSON.parse(JSON.stringify(results)))
+      }
+    });
+  })
+};
+const getList = () => {
+  return getListAction().then(res=>{
+    return res
+  })
 };
 
 const getDetail = (id) => {
