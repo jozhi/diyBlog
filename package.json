@@ -15,15 +15,11 @@
 	"engines": {
 		"node": "0.10.x"
 	},
-	"contributors": [
-		{
-			"name": "李四",
-			"email": "lisi@example.com"
-		}
-	],
+	"contributors": [ { "name": "李四", "email": "lisi@example.com" } ],
 	"scripts": {
 		"dev": "node ./www.js",
-		"prod": "node ./www.js"
+		"prod": "node ./www.js",
+    "s" : "nodemon ./www.js"
 	},
 	"dependencies": {
 		"http": "0.0.1-security",

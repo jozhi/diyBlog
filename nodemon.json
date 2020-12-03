@@ -1,0 +1,11 @@
+{
+  "watch": [],
+  "verbose": false,
+  "ignore": ["node_modules/*"],
+  "script": "www.js",
+  "options": {
+    "extensions": ["js"],
+    "exec": "node"
+  },
+  "delay": "1500"
+}

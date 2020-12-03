@@ -12,8 +12,7 @@ const handleBlogRouter = async (req, res, callback) => {
   // TODO 请求博客列表
   if (method === 'GET' && path === '/api/blog/list') {
     const listData = await getList();
-        // console.log('listData :',listData);
-    // return SuccessModel(listData);
+    // console.log('listData :',listData);
     callback( SuccessModel(listData) )
   }
 
